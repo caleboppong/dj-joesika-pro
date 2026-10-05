@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react'
-
 import {
   CalendarDays,
   CheckCircle2,
@@ -25,14 +24,9 @@ import {
   Plus,
   ExternalLink
 } from 'lucide-react'
-
 import { hasSupabase, supabase } from './lib/supabase'
-
-
-const PHONE_DISPLAY = '07459 742667'
+const PHONE_DISPLAY = '+44 7459 742667'
 const WHATSAPP = '447459742667'
-
-
 const services = [
   [
     'Weddings',
@@ -59,27 +53,20 @@ const services = [
     'Highlife, Hiplife, Afrobeats and classics for every generation.'
   ]
 ]
-
-
 function wa(text) {
   return `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(text)}`
 }
-
 function getVideoInfo(url) {
   if (!url) return null
-
   const cleanUrl = url.trim()
-
   try {
     const parsed = new URL(cleanUrl)
-
-    /* YouTube */
+    /**\\\*** YouTube **\\\***/
     if (
       parsed.hostname.includes('youtube.com') ||
       parsed.hostname.includes('youtu.be')
     ) {
       let videoId = ''
-
       if (parsed.hostname.includes('youtu.be')) {
         videoId = parsed.pathname.split('/').filter(Boolean)[0]
       } else if (parsed.pathname.includes('/shorts/')) {
@@ -89,20 +76,15 @@ function getVideoInfo(url) {
       } else {
         videoId = parsed.searchParams.get('v')
       }
-
       if (!videoId) return null
-
       return {
         platform: 'youtube',
         embedUrl: `https://www.youtube.com/embed/${videoId}`,
         originalUrl: cleanUrl
       }
     }
-
-    /* TikTok */
     if (parsed.hostname.includes('tiktok.com')) {
       const match = cleanUrl.match(/\/video\/(\d+)/)
-
       if (match?.[1]) {
         return {
           platform: 'tiktok',
@@ -110,7 +92,6 @@ function getVideoInfo(url) {
           originalUrl: cleanUrl
         }
       }
-
       return {
         platform: 'tiktok',
         embedUrl: null,
@@ -120,14 +101,10 @@ function getVideoInfo(url) {
   } catch {
     return null
   }
-
   return null
 }
-
-
 function VideoPreview({ url, title = 'Video preview' }) {
   const info = getVideoInfo(url)
-
   if (!info) {
     return (
       <div className="video-fallback">
@@ -136,7 +113,6 @@ function VideoPreview({ url, title = 'Video preview' }) {
       </div>
     )
   }
-
   if (!info.embedUrl) {
     return (
       <div className="video-fallback">
@@ -144,7 +120,6 @@ function VideoPreview({ url, title = 'Video preview' }) {
         <p>
           TikTok preview unavailable for this link.
         </p>
-
         <a
           href={info.originalUrl}
           target="_blank"
@@ -155,7 +130,6 @@ function VideoPreview({ url, title = 'Video preview' }) {
       </div>
     )
   }
-
   return (
     <div className="phone-frame">
       <iframe
@@ -174,11 +148,12 @@ function Nav() {
 
   return (
     <header className="nav">
-      <a className="brand" href="#home">
-        <span className="brand-icon">🎧</span>
-        <span>
-          DJ <b>JOESIKA</b>
-        </span>
+      <a className="brand" href="#home" aria-label="DJ Joesika home">
+        <img
+          src="/assets/logo.jpeg"
+          alt="DJ Joesika"
+          className="brand-logo"
+        />
       </a>
 
       <button
@@ -188,7 +163,6 @@ function Nav() {
       >
         {open ? <X /> : <Menu />}
       </button>
-
       <nav className={open ? 'open' : ''}>
         {[
           'home',
@@ -212,19 +186,15 @@ function Nav() {
     </header>
   )
 }
-
-
 function Hero() {
   return (
     <section id="home" className="hero">
       <div className="hero-shade" />
-
       <div className="hero-content">
         <div className="eyebrow">
           <Sparkles size={16} />
-          Professional DJ • London & beyond
+          Professional DJ • UK & beyond
         </div>
-
         <h1>
           YOUR EVENT.
           <br />
@@ -232,19 +202,16 @@ function Hero() {
           <br />
           YOUR VIBE.
         </h1>
-
         <p>
           Premium DJ entertainment for weddings, birthdays,
           private parties, clubs, corporate events and African
           celebrations.
         </p>
-
         <div className="actions">
           <a className="btn gold" href="#book">
             <CalendarDays />
-            Book DJ Joesika
+            Book your Event
           </a>
-
           <a
             className="btn glass"
             href={wa(
@@ -257,7 +224,6 @@ function Hero() {
             WhatsApp
           </a>
         </div>
-
         <div className="hero-contact">
           <Phone size={18} />
           {PHONE_DISPLAY}
@@ -266,25 +232,20 @@ function Hero() {
     </section>
   )
 }
-
-
 function About() {
   return (
     <section id="about" className="section split">
       <div>
         <div className="kicker">MEET THE DJ</div>
-
         <h2>
           Music that brings <span>people together.</span>
         </h2>
-
         <p className="lead">
           DJ Joesika delivers energetic, audience-focused sets
           designed around the people in the room. From Ghanaian
           classics and Afrobeats to Amapiano, R&B, Hip-Hop and
           party favourites, every event gets its own soundtrack.
         </p>
-
         <div className="chips">
           <span>Afrobeats</span>
           <span>Highlife</span>
@@ -294,45 +255,34 @@ function About() {
           <span>Party Classics</span>
         </div>
       </div>
-
       <div className="about-card">
         <Headphones size={48} />
-
         <h3>Professional Event Experience</h3>
-
         <p>
           Personalised music planning, guest requests,
           announcements and a direct booking experience from
           enquiry to event day.
         </p>
-
         <a href="#book">Check availability →</a>
       </div>
     </section>
   )
 }
-
-
 function Services() {
   return (
     <section id="services" className="section dark">
       <div className="center">
         <div className="kicker">SERVICES</div>
-
         <h2>
           Ready for every <span>celebration.</span>
         </h2>
       </div>
-
       <div className="cards">
         {services.map(([title, description], index) => (
           <article className="service" key={title}>
             <div className="number">0{index + 1}</div>
-
             <Music2 />
-
             <h3>{title}</h3>
-
             <p>{description}</p>
           </article>
         ))}
@@ -340,38 +290,48 @@ function Services() {
     </section>
   )
 }
-
-
+function Promo() {
+  return (
+    <section className="section promo-section">
+      <div className="center">
+        <div className="kicker">DJ JOESIKA</div>
+        <h2>Follow the <span>vibe.</span></h2>
+        <p className="lead narrow">
+          Connect with DJ Joesika on social media and keep up with the latest events, music and performances.
+        </p>
+      </div>
+      <div className="promo-image-wrap">
+        <img
+          src="/assets/Post.png"
+          alt="DJ Joesika social media and contact details"
+          className="promo-image"
+        />
+      </div>
+    </section>
+  )
+}
 function Videos() {
   const [videos, setVideos] = useState([])
   const [loading, setLoading] = useState(true)
-
   useEffect(() => {
     if (!hasSupabase) {
       setLoading(false)
       return
     }
-
     let mounted = true
-
     async function loadVideos() {
       const { data, error } = await supabase
         .from('videos')
         .select('*')
         .eq('active', true)
         .order('created_at', { ascending: false })
-
       if (!mounted) return
-
       if (!error) {
         setVideos(data || [])
       }
-
       setLoading(false)
     }
-
     loadVideos()
-
     const channel = supabase
       .channel('public-videos')
       .on(
@@ -384,27 +344,22 @@ function Videos() {
         loadVideos
       )
       .subscribe()
-
     return () => {
       mounted = false
       supabase.removeChannel(channel)
     }
   }, [])
-
   return (
     <section id="videos" className="section">
       <div className="center">
         <div className="kicker">WATCH DJ JOESIKA</div>
-
         <h2>
           See the <span>energy.</span>
         </h2>
-
         <p className="lead narrow">
           Watch DJ Joesika in action on TikTok and YouTube.
         </p>
       </div>
-
       {loading ? (
         <div className="empty">
           <Music2 />
@@ -414,9 +369,7 @@ function Videos() {
         <div className="video-grid">
           {videos.map((video) => {
             const info = getVideoInfo(video.url)
-
             if (!info) return null
-
             return (
               <article className="video-card" key={video.id}>
                 <VideoPreview
@@ -426,9 +379,7 @@ function Videos() {
                     `DJ Joesika ${info.platform} video`
                   }
                 />
-
                 {video.title && <h3>{video.title}</h3>}
-
                 <a
                   className="video-watch-link"
                   href={video.url}
@@ -454,8 +405,6 @@ function Videos() {
     </section>
   )
 }
-
-
 function Booking() {
   const initial = {
     name: '',
@@ -470,22 +419,17 @@ function Booking() {
     music: '',
     message: ''
   }
-
   const [f, setF] = useState(initial)
   const [status, setStatus] = useState('')
-
   function change(e) {
     setF({
       ...f,
       [e.target.name]: e.target.value
     })
   }
-
   async function submit(e) {
     e.preventDefault()
-
-    const msg = `*DJ BOOKINGS*
-
+    const msg = `\\\*DJ BOOKINGS\\\*
 Name: ${f.name}
 Phone: ${f.phone}
 Email: ${f.email || 'Not provided'}
@@ -496,12 +440,10 @@ Venue: ${f.venue}
 Guests: ${f.guests || 'Not specified'}
 Music: ${f.music || 'Not specified'}
 More details: ${f.message || 'None'}`
-
     if (hasSupabase) {
       const { error } = await supabase
         .from('bookings')
         .insert({ ...f })
-
       if (error) {
         console.error(error)
         setStatus(
@@ -509,47 +451,38 @@ More details: ${f.message || 'None'}`
         )
       }
     }
-
     setStatus('Opening WhatsApp with your booking details…')
-
     window.open(
       wa(msg),
       '_blank',
       'noopener,noreferrer'
     )
   }
-
   return (
     <section id="book" className="section booking">
       <div className="booking-copy">
         <div className="kicker">BOOK DJ JOESIKA</div>
-
         <h2>
           Let’s make your event <span>unforgettable.</span>
         </h2>
-
         <p>
           Complete the form and your booking details will be
           prepared as a WhatsApp message to DJ Joesika.
         </p>
-
         <div className="booking-points">
           <p>
             <CheckCircle2 />
             Fast WhatsApp enquiry
           </p>
-
           <p>
             <CheckCircle2 />
             Music tailored to your event
           </p>
-
           <p>
             <CheckCircle2 />
             Mobile-friendly booking
           </p>
         </div>
-
         <a
           className="phone-link"
           href={`tel:+${WHATSAPP}`}
@@ -558,7 +491,6 @@ More details: ${f.message || 'None'}`
           {PHONE_DISPLAY}
         </a>
       </div>
-
       <form className="form" onSubmit={submit}>
         <div className="row">
           <label>
@@ -570,7 +502,6 @@ More details: ${f.message || 'None'}`
               onChange={change}
             />
           </label>
-
           <label>
             Phone number
             <input
@@ -581,7 +512,6 @@ More details: ${f.message || 'None'}`
             />
           </label>
         </div>
-
         <div className="row">
           <label>
             Email
@@ -592,10 +522,8 @@ More details: ${f.message || 'None'}`
               onChange={change}
             />
           </label>
-
           <label>
             Event type
-
             <select
               name="event"
               value={f.event}
@@ -611,7 +539,6 @@ More details: ${f.message || 'None'}`
             </select>
           </label>
         </div>
-
         <div className="row">
           <label>
             Date
@@ -623,7 +550,6 @@ More details: ${f.message || 'None'}`
               onChange={change}
             />
           </label>
-
           <label>
             Venue / Location
             <input
@@ -634,7 +560,6 @@ More details: ${f.message || 'None'}`
             />
           </label>
         </div>
-
         <div className="row three">
           <label>
             Start
@@ -646,7 +571,6 @@ More details: ${f.message || 'None'}`
               onChange={change}
             />
           </label>
-
           <label>
             End
             <input
@@ -656,7 +580,6 @@ More details: ${f.message || 'None'}`
               onChange={change}
             />
           </label>
-
           <label>
             Guests
             <input
@@ -667,7 +590,6 @@ More details: ${f.message || 'None'}`
             />
           </label>
         </div>
-
         <label>
           Music preferences
           <input
@@ -677,7 +599,6 @@ More details: ${f.message || 'None'}`
             onChange={change}
           />
         </label>
-
         <label>
           Anything else?
           <textarea
@@ -687,36 +608,29 @@ More details: ${f.message || 'None'}`
             onChange={change}
           />
         </label>
-
         <button className="btn gold full">
           <MessageCircle />
           Send Booking to WhatsApp
         </button>
-
         {status && <small>{status}</small>}
       </form>
     </section>
   )
 }
-
 function Live() {
   const [name, setName] = useState('')
   const [song, setSong] = useState('')
   const [note, setNote] = useState('')
   const [sent, setSent] = useState('')
   const [feed, setFeed] = useState([])
-
   const [settings, setSettings] = useState({
     is_live: false,
     event_name: 'DJ Joesika Live',
     auto_approve: false
   })
-
   useEffect(() => {
     if (!hasSupabase) return
-
     let mounted = true
-
     const load = async () => {
       const [{ data: requests }, { data: live }] =
         await Promise.all([
@@ -726,25 +640,20 @@ function Live() {
             .eq('approved', true)
             .order('created_at', { ascending: false })
             .limit(8),
-
           supabase
             .from('live_settings')
             .select('*')
             .eq('id', 1)
             .single()
         ])
-
       if (mounted) {
         setFeed(requests || [])
-
         if (live) {
           setSettings(live)
         }
       }
     }
-
     load()
-
     const channel = supabase
       .channel('public-live')
       .on(
@@ -766,28 +675,22 @@ function Live() {
         (payload) => setSettings(payload.new)
       )
       .subscribe()
-
     return () => {
       mounted = false
       supabase.removeChannel(channel)
     }
   }, [])
-
   async function send(e) {
     e.preventDefault()
-
     if (!name || !song) return
-
     if (!settings.is_live) {
       setSent(
         'DJ Joesika is not live right now. Please use the booking or WhatsApp options.'
       )
       return
     }
-
     if (hasSupabase) {
       const approved = !!settings.auto_approve
-
       const { error } = await supabase
         .from('requests')
         .insert({
@@ -797,7 +700,6 @@ function Live() {
           approved,
           status: approved ? 'approved' : 'pending'
         })
-
       setSent(
         error
           ? 'Could not send request. Please use WhatsApp.'
@@ -808,62 +710,51 @@ function Live() {
     } else {
       window.open(
         wa(
-          `*LIVE SONG REQUEST*
+          `\\\*LIVE SONG REQUEST\\\*
 Name: ${name}
 Song: ${song}
 Message: ${note || 'None'}`
         ),
         '_blank'
       )
-
       setSent('Opening WhatsApp…')
     }
-
     setSong('')
     setNote('')
   }
-
   return (
     <section id="live" className="section live">
       <div className="live-head">
         <div>
           <div
-            className={`live-pill ${
-              settings.is_live ? '' : 'offline'
-            }`}
+            className={`live-pill ${settings.is_live ? '' : 'offline'
+              }`}
           >
             <span />
-
             {settings.is_live
               ? 'LIVE NOW'
               : 'CURRENTLY OFFLINE'}
           </div>
-
           <h2>
             {settings.is_live
               ? settings.event_name
               : 'Request a song or '}
-
             <span>
               {settings.is_live ? '' : 'shout-out.'}
             </span>
           </h2>
-
           <p>
             {settings.is_live
               ? 'Send your request straight to DJ Joesika from your phone.'
               : 'Live requests open when DJ Joesika starts an event.'}
           </p>
         </div>
-
         <Zap size={72} />
       </div>
-
       <div className="live-grid">
         <form className="request" onSubmit={send}>
           <label>
             Your name / table
-
             <input
               value={name}
               onChange={(e) => setName(e.target.value)}
@@ -871,10 +762,8 @@ Message: ${note || 'None'}`
               disabled={!settings.is_live}
             />
           </label>
-
           <label>
             Song / artist
-
             <input
               value={song}
               onChange={(e) => setSong(e.target.value)}
@@ -882,10 +771,8 @@ Message: ${note || 'None'}`
               disabled={!settings.is_live}
             />
           </label>
-
           <label>
             Shout-out or dedication
-
             <textarea
               value={note}
               onChange={(e) => setNote(e.target.value)}
@@ -893,27 +780,22 @@ Message: ${note || 'None'}`
               disabled={!settings.is_live}
             />
           </label>
-
           <button
             className="btn gold full"
             disabled={!settings.is_live}
           >
             <Send />
-
             {settings.is_live
               ? 'Send Request'
               : 'Requests Closed'}
           </button>
-
           {sent && <small>{sent}</small>}
         </form>
-
         <div className="feed">
           <h3>
             <MessageCircle />
             Live request wall
           </h3>
-
           {feed.length ? (
             feed.map((request) => (
               <div
@@ -921,11 +803,9 @@ Message: ${note || 'None'}`
                 key={request.id}
               >
                 <b>{request.song}</b>
-
                 <span>
                   requested by {request.name}
                 </span>
-
                 {request.message && (
                   <small>{request.message}</small>
                 )}
@@ -934,7 +814,6 @@ Message: ${note || 'None'}`
           ) : (
             <div className="empty">
               <Music2 />
-
               <p>
                 Approved requests will appear here during a
                 live programme.
@@ -946,42 +825,29 @@ Message: ${note || 'None'}`
     </section>
   )
 }
-
-
-
 function DjControlRoom() {
   const [session, setSession] = useState(null)
-
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
-
   const [requests, setRequests] = useState([])
   const [bookings, setBookings] = useState([])
   const [videos, setVideos] = useState([])
-
   const [settings, setSettings] = useState({
     id: 1,
     is_live: false,
     event_name: 'DJ Joesika Live',
     auto_approve: false
   })
-
   const [videoTitle, setVideoTitle] = useState('')
   const [videoUrl, setVideoUrl] = useState('')
   const [videoMessage, setVideoMessage] = useState('')
   const [addingVideo, setAddingVideo] = useState(false)
-
-
-  /* AUTH */
-
   useEffect(() => {
     if (!hasSupabase) return
-
     supabase.auth
       .getSession()
       .then(({ data }) => setSession(data.session))
-
     const {
       data: { subscription }
     } = supabase.auth.onAuthStateChange(
@@ -989,18 +855,11 @@ function DjControlRoom() {
         setSession(currentSession)
       }
     )
-
     return () => subscription.unsubscribe()
   }, [])
-
-
-  /* LOAD DASHBOARD */
-
   useEffect(() => {
     if (!session) return
-
     let active = true
-
     const load = async () => {
       const [
         { data: requestData },
@@ -1013,38 +872,31 @@ function DjControlRoom() {
           .select('*')
           .order('created_at', { ascending: false })
           .limit(100),
-
         supabase
           .from('bookings')
           .select('*')
           .order('created_at', { ascending: false })
           .limit(50),
-
         supabase
           .from('live_settings')
           .select('*')
           .eq('id', 1)
           .single(),
-
         supabase
           .from('videos')
           .select('*')
           .order('created_at', { ascending: false })
       ])
-
       if (active) {
         setRequests(requestData || [])
         setBookings(bookingData || [])
         setVideos(videoData || [])
-
         if (liveData) {
           setSettings(liveData)
         }
       }
     }
-
     load()
-
     const channel = supabase
       .channel('dj-control-room')
       .on(
@@ -1084,39 +936,28 @@ function DjControlRoom() {
         load
       )
       .subscribe()
-
     return () => {
       active = false
       supabase.removeChannel(channel)
     }
   }, [session])
-
-
   async function login(e) {
     e.preventDefault()
-
     setError('')
-
     const { error: loginError } =
       await supabase.auth.signInWithPassword({
         email,
         password
       })
-
     if (loginError) {
       setError(loginError.message)
     }
   }
-
-
-  /* REQUEST MANAGEMENT */
-
   async function patchRequest(id, changes) {
     await supabase
       .from('requests')
       .update(changes)
       .eq('id', id)
-
     setRequests((current) =>
       current.map((request) =>
         request.id === id
@@ -1125,52 +966,38 @@ function DjControlRoom() {
       )
     )
   }
-
-
   async function removeRequest(id) {
     await supabase
       .from('requests')
       .delete()
       .eq('id', id)
-
     setRequests((current) =>
       current.filter((request) => request.id !== id)
     )
   }
-
-
-  /* LIVE SETTINGS */
-
   async function patchSettings(changes) {
     const next = {
       ...settings,
       ...changes,
       updated_at: new Date().toISOString()
     }
-
     const { data } = await supabase
       .from('live_settings')
       .update(changes)
       .eq('id', 1)
       .select()
       .single()
-
     if (data) {
       setSettings(data)
     } else {
       setSettings(next)
     }
   }
-
-
-  /* BOOKINGS */
-
   async function patchBooking(id, status) {
     await supabase
       .from('bookings')
       .update({ status })
       .eq('id', id)
-
     setBookings((current) =>
       current.map((booking) =>
         booking.id === id
@@ -1179,26 +1006,17 @@ function DjControlRoom() {
       )
     )
   }
-
-
-  /* VIDEO MANAGEMENT */
-
   async function addVideo(e) {
     e.preventDefault()
-
     setVideoMessage('')
-
     const info = getVideoInfo(videoUrl)
-
     if (!info) {
       setVideoMessage(
         'Please enter a valid TikTok or YouTube link.'
       )
       return
     }
-
     setAddingVideo(true)
-
     const { data, error: insertError } =
       await supabase
         .from('videos')
@@ -1210,19 +1028,14 @@ function DjControlRoom() {
         })
         .select()
         .single()
-
     setAddingVideo(false)
-
     if (insertError) {
       console.error(insertError)
-
       setVideoMessage(
         `Could not publish video: ${insertError.message}`
       )
-
       return
     }
-
     if (data) {
       setVideos((current) => [
         data,
@@ -1231,18 +1044,14 @@ function DjControlRoom() {
         )
       ])
     }
-
     setVideoTitle('')
     setVideoUrl('')
     setVideoMessage(
       'Video published successfully.'
     )
   }
-
-
   async function toggleVideo(video) {
     const nextActive = !video.active
-
     const { error: updateError } =
       await supabase
         .from('videos')
@@ -1250,65 +1059,49 @@ function DjControlRoom() {
           active: nextActive
         })
         .eq('id', video.id)
-
     if (updateError) {
       setVideoMessage(
         `Could not update video: ${updateError.message}`
       )
-
       return
     }
-
     setVideos((current) =>
       current.map((item) =>
         item.id === video.id
           ? {
-              ...item,
-              active: nextActive
-            }
+            ...item,
+            active: nextActive
+          }
           : item
       )
     )
-
     setVideoMessage(
       nextActive
         ? 'Video is now visible on the website.'
         : 'Video has been hidden from the website.'
     )
   }
-
-
   async function removeVideo(id) {
     const confirmed = window.confirm(
       'Delete this video from the website?'
     )
-
     if (!confirmed) return
-
     const { error: deleteError } =
       await supabase
         .from('videos')
         .delete()
         .eq('id', id)
-
     if (deleteError) {
       setVideoMessage(
         `Could not delete video: ${deleteError.message}`
       )
-
       return
     }
-
     setVideos((current) =>
       current.filter((video) => video.id !== id)
     )
-
     setVideoMessage('Video deleted.')
   }
-
-
-  /* SUPABASE MISSING */
-
   if (!hasSupabase) {
     return (
       <main className="admin-shell">
@@ -1318,10 +1111,6 @@ function DjControlRoom() {
       </main>
     )
   }
-
-
-  /* LOGIN */
-
   if (!session) {
     return (
       <main className="admin-shell">
@@ -1332,21 +1121,17 @@ function DjControlRoom() {
           <div className="kicker">
             PRIVATE ACCESS
           </div>
-
           <h1>
             DJ JOESIKA
             <br />
             <span>CONTROL ROOM</span>
           </h1>
-
           <p>
             Sign in with the DJ account created in
             Supabase Authentication.
           </p>
-
           <label>
             Email
-
             <input
               type="email"
               value={email}
@@ -1356,10 +1141,8 @@ function DjControlRoom() {
               required
             />
           </label>
-
           <label>
             Password
-
             <input
               type="password"
               value={password}
@@ -1369,31 +1152,23 @@ function DjControlRoom() {
               required
             />
           </label>
-
           <button className="btn gold full">
             <ShieldCheck />
             Sign In
           </button>
-
           {error && <small>{error}</small>}
-
           <a href="/">← Back to website</a>
         </form>
       </main>
     )
   }
-
-
   const pending = requests.filter(
     (request) =>
       request.status === 'pending' ||
       (!request.approved &&
         request.status !== 'declined')
   )
-
   const previewInfo = getVideoInfo(videoUrl)
-
-
   return (
     <main className="admin-shell">
       <header className="admin-top">
@@ -1401,7 +1176,6 @@ function DjControlRoom() {
           <b>🎧 DJ JOESIKA</b>
           <span>CONTROL ROOM</span>
         </div>
-
         <button
           className="btn glass"
           onClick={() =>
@@ -1412,41 +1186,27 @@ function DjControlRoom() {
           Sign out
         </button>
       </header>
-
-
       <section className="admin-content">
-
-        {/* DASHBOARD HEADER */}
-
         <div className="admin-title">
           <div>
             <div className="kicker">
               PRIVATE DJ DASHBOARD
             </div>
-
             <h1>Live Control Room</h1>
           </div>
-
           <div
-            className={`status-big ${
-              settings.is_live ? 'on' : ''
-            }`}
+            className={`status-big ${settings.is_live ? 'on' : ''
+              }`}
           >
             <Radio />
-
             {settings.is_live
               ? 'LIVE'
               : 'OFFLINE'}
           </div>
         </div>
-
-
-        {/* LIVE CONTROLS */}
-
         <div className="control-panel">
           <label>
             Event name
-
             <input
               value={settings.event_name}
               onChange={(e) =>
@@ -1463,13 +1223,11 @@ function DjControlRoom() {
               }
             />
           </label>
-
           <button
-            className={`btn ${
-              settings.is_live
-                ? 'danger'
-                : 'gold'
-            }`}
+            className={`btn ${settings.is_live
+              ? 'danger'
+              : 'gold'
+              }`}
             onClick={() =>
               patchSettings({
                 is_live:
@@ -1481,7 +1239,6 @@ function DjControlRoom() {
               ? '■ END EVENT'
               : '● GO LIVE'}
           </button>
-
           <label className="switch-line">
             <input
               type="checkbox"
@@ -1495,41 +1252,30 @@ function DjControlRoom() {
                 })
               }
             />
-
             Auto-approve requests to public wall
           </label>
         </div>
-
-
-        {/* VIDEO MANAGEMENT */}
-
         <section className="admin-card video-manager">
           <div className="video-manager-heading">
             <div>
               <div className="kicker">
                 WEBSITE VIDEOS
               </div>
-
               <h2>Manage Videos</h2>
-
               <p>
                 Paste a normal TikTok or YouTube
                 link. The website will create the
                 player automatically.
               </p>
             </div>
-
             <Youtube size={38} />
           </div>
-
-
           <form
             className="video-admin-form"
             onSubmit={addVideo}
           >
             <label>
               Video title
-
               <input
                 value={videoTitle}
                 onChange={(e) =>
@@ -1540,10 +1286,8 @@ function DjControlRoom() {
                 placeholder="Example: Wedding Party Highlights"
               />
             </label>
-
             <label>
               TikTok or YouTube link
-
               <input
                 type="url"
                 value={videoUrl}
@@ -1556,26 +1300,22 @@ function DjControlRoom() {
                 required
               />
             </label>
-
-
             {videoUrl && (
               <div className="admin-video-preview">
                 <div className="kicker">
                   PREVIEW
                 </div>
-
                 {previewInfo ? (
                   <>
                     <p>
                       Detected:{' '}
                       <strong>
                         {previewInfo.platform ===
-                        'youtube'
+                          'youtube'
                           ? 'YouTube'
                           : 'TikTok'}
                       </strong>
                     </p>
-
                     <VideoPreview
                       url={videoUrl}
                       title="DJ video preview"
@@ -1584,7 +1324,6 @@ function DjControlRoom() {
                 ) : (
                   <div className="video-fallback">
                     <Music2 size={36} />
-
                     <p>
                       This does not look like a
                       valid TikTok or YouTube link.
@@ -1593,8 +1332,6 @@ function DjControlRoom() {
                 )}
               </div>
             )}
-
-
             <button
               className="btn gold"
               disabled={
@@ -1603,28 +1340,22 @@ function DjControlRoom() {
               }
             >
               <Plus />
-
               {addingVideo
                 ? 'Publishing...'
                 : 'Publish Video'}
             </button>
-
             {videoMessage && (
               <small>{videoMessage}</small>
             )}
           </form>
-
-
           <div className="admin-video-list">
             <h3>
               Published Videos ({videos.length})
             </h3>
-
             {videos.length ? (
               videos.map((video) => {
                 const info =
                   getVideoInfo(video.url)
-
                 return (
                   <article
                     className="admin-video-item"
@@ -1633,23 +1364,20 @@ function DjControlRoom() {
                     <div>
                       <small>
                         {info?.platform ===
-                        'youtube'
+                          'youtube'
                           ? 'YouTube'
                           : 'TikTok'}
                       </small>
-
                       <strong>
                         {video.title ||
                           'Untitled video'}
                       </strong>
-
                       <span>
                         {video.active
                           ? 'Visible on website'
                           : 'Hidden'}
                       </span>
                     </div>
-
                     <div className="request-actions">
                       <a
                         href={video.url}
@@ -1659,7 +1387,6 @@ function DjControlRoom() {
                       >
                         <ExternalLink />
                       </a>
-
                       <button
                         type="button"
                         title={
@@ -1677,7 +1404,6 @@ function DjControlRoom() {
                           <EyeOff />
                         )}
                       </button>
-
                       <button
                         type="button"
                         title="Delete video"
@@ -1696,7 +1422,6 @@ function DjControlRoom() {
             ) : (
               <div className="empty">
                 <Youtube />
-
                 <p>
                   No videos have been added yet.
                 </p>
@@ -1704,18 +1429,12 @@ function DjControlRoom() {
             )}
           </div>
         </section>
-
-
-        {/* REQUESTS + BOOKINGS */}
-
         <div className="admin-grid">
-
           <section className="admin-card">
             <h2>
               <span>{pending.length}</span>
               New Requests
             </h2>
-
             {requests.length ? (
               requests.map((request) => (
                 <article
@@ -1735,18 +1454,15 @@ function DjControlRoom() {
                       )}{' '}
                       • {request.name}
                     </small>
-
                     <strong>
                       🎵 {request.song}
                     </strong>
-
                     {request.message && (
                       <p>
                         📣 {request.message}
                       </p>
                     )}
                   </div>
-
                   <div className="request-actions">
                     <button
                       title="Approve"
@@ -1763,7 +1479,6 @@ function DjControlRoom() {
                     >
                       <Check />
                     </button>
-
                     <button
                       title="Playing"
                       onClick={() =>
@@ -1779,7 +1494,6 @@ function DjControlRoom() {
                     >
                       <Play />
                     </button>
-
                     <button
                       title="Done"
                       onClick={() =>
@@ -1794,7 +1508,6 @@ function DjControlRoom() {
                     >
                       <CheckCircle2 />
                     </button>
-
                     <button
                       title="Decline"
                       onClick={() =>
@@ -1810,7 +1523,6 @@ function DjControlRoom() {
                     >
                       <XCircle />
                     </button>
-
                     <button
                       title="Delete"
                       onClick={() =>
@@ -1827,16 +1539,12 @@ function DjControlRoom() {
             ) : (
               <div className="empty">
                 <Music2 />
-
                 <p>No requests yet.</p>
               </div>
             )}
           </section>
-
-
           <section className="admin-card">
             <h2>Bookings</h2>
-
             {bookings.length ? (
               bookings.map((booking) => (
                 <article
@@ -1847,16 +1555,13 @@ function DjControlRoom() {
                     {booking.date} •{' '}
                     {booking.event}
                   </small>
-
                   <strong>
                     {booking.name}
                   </strong>
-
                   <span>
                     {booking.venue} •{' '}
                     {booking.phone}
                   </span>
-
                   <select
                     value={
                       booking.status ||
@@ -1872,15 +1577,12 @@ function DjControlRoom() {
                     <option value="new">
                       New
                     </option>
-
                     <option value="confirmed">
                       Confirmed
                     </option>
-
                     <option value="completed">
                       Completed
                     </option>
-
                     <option value="cancelled">
                       Cancelled
                     </option>
@@ -1890,7 +1592,6 @@ function DjControlRoom() {
             ) : (
               <div className="empty">
                 <CalendarDays />
-
                 <p>No bookings yet.</p>
               </div>
             )}
@@ -1900,45 +1601,34 @@ function DjControlRoom() {
     </main>
   )
 }
-
-
-
 function Footer() {
   return (
     <footer>
       <div className="footer-brand">
         <span>🎧</span>
-
         <div>
           DJ <b>JOESIKA</b>
-
           <small>
             Your Event. Your Music. Your Vibe.
           </small>
         </div>
       </div>
-
       <div>
         <h4>Contact</h4>
-
         <a href={`tel:+${WHATSAPP}`}>
           {PHONE_DISPLAY}
         </a>
-
-        <a href="mailto:Sika525@yahoo.com">
-          Sika525@yahoo.com
+        <a href="mailto:Sika525\\@yahoo.com">
+          Sika525\\@yahoo.com
         </a>
       </div>
-
       <div>
         <h4>Social</h4>
-
         <span>TikTok: Joesikal</span>
         <span>Facebook: Dada Joesika</span>
         <span>Instagram: Dada Joesika</span>
         <span>Snapchat: Joesikaj</span>
       </div>
-
       <p className="copyright">
         © {new Date().getFullYear()} DJ Joesika.
         All rights reserved.
@@ -1946,25 +1636,21 @@ function Footer() {
     </footer>
   )
 }
-
-
-
 export default function App() {
   if (window.location.pathname === '/dj') {
     return <DjControlRoom />
   }
-
   return (
     <>
       <Nav />
       <Hero />
       <About />
       <Services />
+      <Promo />
       <Videos />
       <Live />
       <Booking />
       <Footer />
-
       <a
         className="float-wa"
         href={wa(
