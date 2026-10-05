@@ -1618,7 +1618,7 @@ function Footer() {
         <a href={`tel:+${WHATSAPP}`}>
           {PHONE_DISPLAY}
         </a>
-        <a href="mailto:Sika525\\@yahoo.com">
+        <a href="mailto:Sika525@yahoo.com">
           Sika525\\@yahoo.com
         </a>
       </div>
