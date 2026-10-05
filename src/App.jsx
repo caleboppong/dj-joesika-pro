@@ -1619,7 +1619,7 @@ function Footer() {
           {PHONE_DISPLAY}
         </a>
         <a href="mailto:Sika525@yahoo.com">
-          Sika525\\@yahoo.com
+          Sika525@yahoo.com
         </a>
       </div>
       <div>
